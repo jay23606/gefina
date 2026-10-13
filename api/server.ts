@@ -16,12 +16,22 @@ app.use((request, _response, next) => {
 });
 
 app.get('/api/health', async (_request, response) => {
-  await pool.query('SELECT 1');
+  try {
+    await pool.query('SELECT 1');
 
-  response.status(200).json({
-    status: 'ok',
-    database: 'ok'
-  });
+    response.status(200).json({
+      status: 'ok',
+      database: 'ok'
+    });
+  } catch (error) {
+    console.error(error);
+
+    response.status(500).json({
+      status: 'ok',
+      database: 'unavailable'
+    })
+  }
+
 });
 
 app.use('/api/invoices', invoices);
