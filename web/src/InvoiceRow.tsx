@@ -1,5 +1,9 @@
 import type { Invoice } from './invoice.ts';
 import situationLabel from './situationLabel.ts';
+import {
+    formatCurrency,
+    formatDate
+} from './format.ts';
 
 interface InvoiceRowProps {
     invoice: Invoice;
@@ -11,9 +15,9 @@ export default function InvoiceRow(props: InvoiceRowProps) {
     return <>
         <tr>
             <td>{invoice.customer.name}</td>
-            <td>{invoice.amount}</td>
-            <td>{invoice.issueDate}</td>
-            <td>{invoice.dueDate}</td>
+            <td>{formatCurrency(invoice.amount)}</td>
+            <td>{formatDate(invoice.issueDate)}</td>
+            <td>{formatDate(invoice.dueDate)}</td>
             <td>{situationLabel(invoice.situation)}</td>
         </tr>
     </>;
