@@ -8,19 +8,31 @@ import {
 const routes = express.Router();
 
 routes.get('/', async (_request, response) => {
-  const invoices = await findAllInvoices();
+  try {
+    const invoices = await findAllInvoices();
 
-  response.status(200).json(invoices);
+    response.status(200).json(invoices);
+  } catch (error) {
+    console.error(error);
+
+    response.status(500).json({ error: { message: 'Não foi possível carregar as faturas.' } });
+  }
 });
 
 routes.get('/:id', async (request, response) => {
-  const id = +request.params.id;
+  try {
+    const id = +request.params.id;
 
-  const invoice = await findInvoiceById(id);
+    const invoice = await findInvoiceById(id);
 
-  if (!invoice) response.status(404).json({ error: { message: 'Fatura não encontrada.' } });
+    if (!invoice) response.status(404).json({ error: { message: 'Fatura não encontrada.' } });
 
-  response.status(200).json(invoice);
+    response.status(200).json(invoice);
+  } catch (error) {
+    console.error(error);
+
+    response.status(500).json({ error: { message: 'Não foi possível carregar a fatura.' } });
+  }
 });
 
 export default routes;
