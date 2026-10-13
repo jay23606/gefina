@@ -1,8 +1,10 @@
-import path from 'node:path';
-
 import express from 'express';
 
+import path from 'node:path';
+
 import invoices from './invoice.route.ts';
+
+import pool from './database.ts';
 
 const app = express();
 
@@ -13,8 +15,13 @@ app.use((request, _response, next) => {
   next();
 });
 
-app.get('/api/health', (_request, response) => {
-  response.status(200).json({ status: 'ok' });
+app.get('/api/health', async (_request, response) => {
+  await pool.query('SELECT 1');
+
+  response.status(200).json({
+    status: 'ok',
+    database: 'ok'
+  });
 });
 
 app.use('/api/invoices', invoices);
