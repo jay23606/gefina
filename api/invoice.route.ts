@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type NextFunction, type Request, type Response } from 'express';
 
 import {
   findAllInvoices,
@@ -21,6 +21,12 @@ routes.get('/:id', async (request, response) => {
   if (!invoice) response.status(404).json({ error: { message: 'Fatura não encontrada.' } });
 
   response.status(200).json(invoice);
+});
+
+routes.use((error: unknown, _request: Request, response: Response, _next: NextFunction) => {
+  console.error(error);
+
+  response.status(500).json({ error: { message: 'Erro interno do servidor.' } });
 });
 
 export default routes;
